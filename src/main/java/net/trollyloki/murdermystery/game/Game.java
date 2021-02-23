@@ -12,6 +12,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -232,6 +233,10 @@ public class Game extends BukkitRunnable {
             UUID underdog = Utils.removeRandomElement(options);
             this.roles.put(underdog, Role.UNDERDOG);
         }
+        if (!options.isEmpty()) {
+            UUID troublemaker = Utils.removeRandomElement(options);
+            this.roles.put(troublemaker, Role.TROUBLEMAKER);
+        }
         for (UUID bystander : options)
             this.roles.put(bystander, Role.BYSTANDER);
 
@@ -276,7 +281,16 @@ public class Game extends BukkitRunnable {
 
                     player.getInventory().setItem(slot, new ItemStack(Material.SNOWBALL));
 
+                } else if (role == Role.TROUBLEMAKER) {
+
+                    ItemStack bottle = new ItemStack(Material.GLASS_BOTTLE);
+                    ItemMeta meta = bottle.getItemMeta();
+                    meta.setDisplayName(plugin.getConfigString("items.troublemaker.bottle_name"));
+                    bottle.setItemMeta(meta);
+                    player.getInventory().setItem(slot, bottle);
+
                 }
+
                 player.getInventory().setItem(9, new ItemStack(Material.ARROW));
 
                 // Show titles

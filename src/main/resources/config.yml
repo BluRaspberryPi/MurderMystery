@@ -19,6 +19,9 @@ roles:
   underdog:
     name: '&5Underdog'
     goal: 'Snowball the murderer'
+  troublemaker:
+    name: '&7Troublemaker'
+    goal: 'CAUSE TROUBLE!'
   bystander:
     name: '&6Bystander'
     goal: 'Survive the murderer'
@@ -67,3 +70,5 @@ items:
     bow_name: '&9Detective Bow'
     bow_dropped: '&9The bow has been dropped!'
     bow_pickedup: '&9The bow has been picked up!'
+  troublemaker:
+    bottle_name: '&oMysterious Bottle'

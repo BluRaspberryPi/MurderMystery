@@ -1,6 +1,7 @@
 package net.trollyloki.murdermystery;
 
 import net.trollyloki.murdermystery.game.Game;
+import net.trollyloki.murdermystery.game.Role;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Hanging;
 import org.bukkit.entity.Player;
@@ -78,6 +79,15 @@ public class GameListener implements Listener {
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         if (getGame(event.getPlayer()) != null)
             event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEntityEvent event) {
+        public Role getRole(Player player) {
+            if (roles == null)
+                return null;
+            return roles.getOrDefault(player.getUniqueId(), Role.DEAD);
+        }
     }
 
     @EventHandler
