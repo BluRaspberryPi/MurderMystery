@@ -24,6 +24,8 @@ import java.util.*;
 
 public class Game extends BukkitRunnable {
 
+    public static final String MUTE_CHANNEL = "murdermystery:mute";
+
     private final MurderMysteryPlugin plugin;
     private final ArrayList<UUID> players;
     private final HashMap<UUID, Integer> scores;
@@ -322,6 +324,7 @@ public class Game extends BukkitRunnable {
             Player player = Bukkit.getPlayer(uuid);
             if (player != null) {
 
+                mute(player, false);
                 player.getInventory().clear();
                 player.removePotionEffect(PotionEffectType.SATURATION);
 
@@ -378,7 +381,9 @@ public class Game extends BukkitRunnable {
      */
     public Role kill(Player player) {
         if (!isRunning())
-            throw new IllegalStateException("Game is not running");
+            return null;
+
+        mute(player, true);
 
         Role role = roles.remove(player.getUniqueId());
         if (role != null) {
@@ -406,6 +411,17 @@ public class Game extends BukkitRunnable {
         }
 
         return role;
+    }
+
+    /**
+     * Attempts to change the mute status of the given player
+     *
+     * @param player Player
+     * @param mute {@code true} to mute, or {@code false} to unmute
+     */
+    public void mute(Player player, boolean mute) {
+        byte status = (byte) (mute ? 1 : 0);
+        player.sendPluginMessage(plugin, MUTE_CHANNEL, new byte[]{status});
     }
 
     /**
@@ -587,10 +603,8 @@ public class Game extends BukkitRunnable {
     }
 
     public void onPlayerQuit(PlayerQuitEvent event) {
-        if (!isRunning())
-            return;
-
-        kill(event.getPlayer());
+        if (isRunning())
+            kill(event.getPlayer());
 
         int online = 0;
         for (UUID player : players) {
